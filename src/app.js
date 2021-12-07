@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 
 const bodyParser = require('body-parser');
+const getPagination = require('../libs/getPagination');
 const jsonParser = bodyParser.json();
 
 module.exports = (db) => {
@@ -105,7 +106,20 @@ module.exports = (db) => {
 	});
 
 	app.get('/rides', (req, res) => {
-		db.all('SELECT * FROM Rides', function (err, rows) {
+		let SQL = 'SELECT * FROM Rides';
+		let params = [];
+		if (req.query && req.query.page) {
+			const page = Number(req.query.page);
+			const limit = req.query.limit ? Number(req.query.limit) : 10;
+
+			if (page) {
+				SQL = 'SELECT * FROM Rides LIMIT ? OFFSET ?';
+				params = getPagination(page, limit);
+			}
+		}
+
+		db.all(SQL, params, function (err, rows) {
+			console.log(SQL);
 			if (err) {
 				return res.send({
 					error_code: 'SERVER_ERROR',

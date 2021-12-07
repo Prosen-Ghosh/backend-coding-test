@@ -58,6 +58,8 @@
  * GET /rides
  * @summary Find All Rides
  * @tags Ride
+ * @param {number} page.query - pagination page number
+ * @param {number} limit.query - pagination limit number default 10
  * @return {array<Ride>} 200 - success response
  * @example response - 200 - success response example
  * [
