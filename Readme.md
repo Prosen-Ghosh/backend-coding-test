@@ -31,6 +31,9 @@ Please deliver documentation of the server that clearly explains the goals of th
 1. A pull request against `master` of your fork with a clear description of the change and purpose and merge it
 3. **[BONUS]** Create an easy way to deploy and view the documentation in a web format and include instructions to do so
 
+### Implementation note
+ - Documented api using `swagger` and `jsdoc`. You can find the API documentation after starting server by running `npm start` and after that visit `/api-docs`.
+
 ### Implement Tooling
 
 Please implement the following tooling:

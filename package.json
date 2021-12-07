@@ -18,6 +18,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
+    "express-jsdoc-swagger": "^1.6.7",
     "sqlite3": "^4.0.6"
   },
   "devDependencies": {
