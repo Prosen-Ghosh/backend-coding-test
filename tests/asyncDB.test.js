@@ -56,7 +56,7 @@ describe("async db test", () => {
 
   it("db run should throw server error", async () => {
     try {
-      await asyncDB.all("INSERT 1");
+      await asyncDB.run("INSERT 1");
     } catch (error) {
       assert.deepEqual(error, {
         error_code: "SERVER_ERROR",
