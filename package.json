@@ -26,15 +26,11 @@
   },
   "devDependencies": {
     "eslint": "^6.0.0",
+    "husky": "^7.0.4",
     "mocha": "^6.1.4",
     "nyc": "^15.1.0",
     "pre-push": "^0.1.1",
     "supertest": "^4.0.2"
-  },
-  "pre-push": {
-    "run": [
-      "test"
-    ]
   },
   "nyc": {
     "reporter": [
