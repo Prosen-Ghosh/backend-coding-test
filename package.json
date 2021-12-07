@@ -10,7 +10,8 @@
     "test": "npm run lint && npm run coverage",
     "start": "node index.js",
     "lint": "eslint --fix --ext .js, .",
-    "coverage": "nyc mocha tests"
+    "coverage": "nyc mocha tests",
+    "test:load": "forever start --minUptime 10000 --spinSleepTime 3000 index.js && artillery run artillery/riders.yml"
   },
   "keywords": [
     "Xendit"
@@ -25,7 +26,9 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "artillery": "^1.5.6",
     "eslint": "^6.0.0",
+    "forever": "^4.0.1",
     "husky": "^7.0.4",
     "mocha": "^6.1.4",
     "nyc": "^15.1.0",
