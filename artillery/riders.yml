@@ -1,0 +1,27 @@
+config:
+  target: "http://localhost:8010"
+  phases:
+    - duration: 60
+      arrivalRate: 100
+
+scenarios:
+  - name: "Get first page of airports"
+    flow:
+      - get:
+          url: "/health"
+      - post:
+          url: "/rides"
+        json:
+          start_lat: 50
+          start_long: 50
+          end_lat: 80
+          end_long: 80
+          rider_name: "MR X"
+          driver_name: "MR D"
+          driver_vehicle: "BMW"
+      - get:
+          url: "/rides"
+      - get:
+          url: "/rides?page=1&limit=10"
+      - get:
+          url: "/rides/1"
