@@ -7,8 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
-    "start": "node index.js"
+    "test": "npm run lint && npm run coverage",
+    "start": "node index.js",
+    "lint": "eslint --fix --ext .js, .",
+    "coverage": "nyc mocha tests"
   },
   "keywords": [
     "Xendit"
@@ -19,10 +21,32 @@
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
     "express-jsdoc-swagger": "^1.6.7",
-    "sqlite3": "^4.0.6"
+    "sqlite3": "^4.0.6",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
+    "eslint": "^6.0.0",
     "mocha": "^6.1.4",
+    "nyc": "^15.1.0",
+    "pre-push": "^0.1.1",
     "supertest": "^4.0.2"
+  },
+  "pre-push": {
+    "run": [
+      "test"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "node_modules",
+      "./tests/*.js"
+    ]
   }
 }
