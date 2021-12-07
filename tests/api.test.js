@@ -162,7 +162,7 @@ describe("API tests", () => {
     });
   });
 
-  describe("GET /rides/{rideID}", () => {
+  describe("GET /rides/{id}", () => {
     it("should return a first ride", (done) => {
       request(app)
         .get("/rides/1")
@@ -179,6 +179,52 @@ describe("API tests", () => {
         },
         done
       );
+    });
+  });
+
+  describe("GET /rides with pagination", () => {
+    before((done) => {
+      for (let i = 0; i < 20; i++) {
+        db.run(
+          `
+				INSERT INTO Rides (startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle)
+				VALUES (?, ?, ?, ?, ?, ?, ?)
+			`,
+          [
+            52,
+            50,
+            80,
+            80,
+            `MR ${String.fromCharCode(65 + i)}`,
+            `MR ${String.fromCharCode(97 + i)}`,
+            "BMW",
+          ]
+        );
+      }
+      done();
+    });
+    it("should return default 10 rows", (done) => {
+      request(app)
+        .get("/rides?page=1")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          assert.equal(res.body.length, 10);
+          done();
+        });
+    });
+
+    it("should return limit 2 rows", (done) => {
+      request(app)
+        .get("/rides?page=1&limit=2")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          assert.equal(res.body.length, 2);
+          done();
+        });
     });
   });
 });
