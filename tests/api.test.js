@@ -227,4 +227,68 @@ describe("API tests", () => {
         });
     });
   });
+
+  it("should prevent injection in GET /rides/{rideID}", (done) => {
+	request(app)
+	  .get("/rides/1000' OR 1=1;")
+	  .expect("Content-Type", /json/)
+	  .expect(200)
+	  .end(function (err, res) {
+		if (err) return done(err);
+		assert.deepEqual(res.body, {
+		  error_code: "RIDES_NOT_FOUND_ERROR",
+		  message: "Could not find any rides",
+		});
+		done();
+	  });
+  });
+
+  describe("Secured for SQL injection", () => {
+    it("should prevent injection in POST /rides API", (done) => {
+      request(app)
+        .post("/rides")
+        .send({
+          start_lat: 50,
+          start_long: 20,
+          end_lat: 80,
+          end_long: 80,
+          rider_name: "MR X",
+          driver_name: "MR D",
+          driver_vehicle: "BMW; AND DELETE FROM Rides WHERE rideID > 1",
+        })
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end(function (err) {
+          if (err) return done(err);
+          request(app)
+            .get("/rides")
+            .expect("Content-Type", /json/)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) return done(err);
+              assert.equal(res.body.length, 22);
+              done();
+            });
+        });
+    });
+
+	it("should prevent injection in GET /rides with pagination", (done) => {
+		request(app)
+		  .get("/rides?page=1; DELETE FROM Rides WHERE (rideID > 1);")
+		  .expect("Content-Type", /json/)
+		  .expect(200)
+		  .end(function (err) {
+			if (err) return done(err);
+			request(app)
+			  .get("/rides")
+			  .expect("Content-Type", /json/)
+			  .expect(200)
+			  .end(function (err, res) {
+				if (err) return done(err);
+				assert.equal(res.body.length, 22);
+				done();
+			  });
+		  });
+	  });
+  });
 });
